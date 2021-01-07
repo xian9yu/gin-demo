@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -29,7 +30,6 @@ func AuthMiddleware() gin.HandlerFunc {
 				c.Abort()
 				return
 			}
-
 			c.JSON(http.StatusOK, gin.H{
 				"code": -1,
 				"msg":  err.Error(),
@@ -37,7 +37,17 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		//}
+
+		refresh := (claims.StandardClaims.ExpiresAt - int64(time.Now().Unix())) < (ExpireTime / 2)
+		if refresh {
+			claims.StandardClaims.ExpiresAt = (time.Now().Unix()+1000)
+			tok, _ := j.CreateToken(claims)
+			c.JSON(http.StatusOK, gin.H{
+				"code": 0,
+				"data":  tok,
+			})
+		}
+
 		c.Set("claims", claims)
 	}
 }

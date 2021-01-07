@@ -8,8 +8,8 @@ type User struct {
 	ID        int64  `json:"id" gorm:"comment:用户ID"`
 	UserName  string `json:"user_name" gorm:"comment:用户登录名"`
 	PassWord  string `json:"-"  gorm:"comment:用户登录密码"`
-	CreatedAt int64  `gorm:"autoCreateTime"`
-	UpdatedAt int64  `gorm:"autoUpdateTime"`
+	CreatedAt int64  `gorm:"created_at"`
+	UpdatedAt int64  `gorm:"updated_at"`
 }
 
 //Login
