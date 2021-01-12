@@ -15,8 +15,8 @@ func main() {
 	//fmt.Println("err:", cfg.SQL.DataSource)
 	//fmt.Println("err:", cfg.ListenOn.Host, cfg.ListenOn.Port)
 
-	//初始化sql
-	models.DB = models.InitSQL()
+	models.DB = models.InitSQL()     //初始化sql
+	models.Rdb = models.InitClient() //初始化 redis
 
 	//初始化router
 	r := gin.Default()

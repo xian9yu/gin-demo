@@ -49,7 +49,7 @@ func (j *JWT) GenerateToken(c *gin.Context, user models.User) (string, error) {
 		Id:       user.ID,
 		UserName: user.UserName,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: int64(time.Now().Unix() + ExpireTime), // 签名过期时间(时间戳/s)
+			//ExpiresAt: int64(time.Now().Unix() + ExpireTime), // 签名过期时间(时间戳/s)
 			Issuer:    "9yu",                                 // 签名颁发者
 			IssuedAt:  time.Now().Unix(),                     //签名时间
 		},

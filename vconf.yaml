@@ -1,10 +1,13 @@
 ListenOn: #服务监听 host,port
   Host: 0.0.0.0
-  Port: 8080
+  Port: 80
 
 MySQL: #数据库
   DataSource: gggorm:gggorm@tcp(155.94.128.55:3306)/gggorm?charset=utf8
-
+#  DataSource: gggorm:gggorm@tcp(127.0.0.1:3306)/gggorm?charset=utf8
+Redis:
+  HP: localhost:6379
+  Password:
 JWT:
   SecretKey: zhe_shi_secretKey
   ExpireAt: 86400

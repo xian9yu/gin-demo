@@ -1,11 +1,14 @@
 package user
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"github.com/gin-gonic/gin"
 	"jwt/middleware"
 	"jwt/models"
 	"jwt/utils"
 	"net/http"
+	"time"
 )
 
 //var expireTime int64 = 600 // token有效期(时间戳/s)
@@ -38,7 +41,7 @@ func Login(c *gin.Context) {
 					"data":   nil,
 				})
 			}
-
+			_ = models.StrSet(GetMd5String(token), user.UserName, time.Hour*24)
 			c.JSON(http.StatusOK, gin.H{
 				"status": 0,
 				"msg":    "登陆成功",
@@ -48,36 +51,8 @@ func Login(c *gin.Context) {
 	}
 }
 
-//// token生成器
-//func generateToken(c *gin.Context, user models.User) {
-//	// 构造SignKey: 签名和解签名需要使用一个值
-//	j := utils.NewJWT()
-//
-//	// 构造用户claims信息(负荷)
-//	claims := utils.Claims{
-//		Id:       user.ID,
-//		UserName: user.UserName,
-//		StandardClaims: jwt.StandardClaims{
-//			ExpiresAt: int64(time.Now().Unix() + expireTime), // 签名过期时间(时间戳/s)
-//			Issuer:    user.UserName,                         // 签名颁发者
-//			IssuedAt:  time.Now().Unix(),                     //签名时间
-//		},
-//	}
-//
-//	// 根据claims生成token对象
-//	token, err := j.CreateToken(claims)
-//
-//	if err != nil {
-//		c.JSON(http.StatusOK, gin.H{
-//			"status": -1,
-//			"msg":    err.Error(),
-//			"data":   nil,
-//		})
-//	}
-//
-//	c.JSON(http.StatusOK, gin.H{
-//		"status": 0,
-//		"msg":    "登陆成功",
-//		"data":   token,
-//	})
-//}
+func GetMd5String(s string) string {
+	h := md5.New()
+	h.Write([]byte(s))
+	return hex.EncodeToString(h.Sum(nil))
+}
