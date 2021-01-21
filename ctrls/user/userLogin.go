@@ -8,6 +8,7 @@ import (
 	"jwt/models"
 	"jwt/utils"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -25,7 +26,6 @@ func Login(c *gin.Context) {
 			"msg":  "登录失败",
 		})
 	} else {
-
 		if fuser, errs := user.FindByName(user.UserName); errs != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"code": -1,
@@ -41,7 +41,7 @@ func Login(c *gin.Context) {
 					"data":   nil,
 				})
 			}
-			_ = models.StrSet(GetMd5String(token), user.UserName, time.Hour*24)
+			_ = models.StrSetEX(token, strconv.FormatInt(fuser.ID, 10), time.Second*100)
 			c.JSON(http.StatusOK, gin.H{
 				"status": 0,
 				"msg":    "登陆成功",

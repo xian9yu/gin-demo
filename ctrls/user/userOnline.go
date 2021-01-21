@@ -7,9 +7,8 @@ import (
 )
 
 func GetOnlineList(c *gin.Context) {
-	var user models.User
-	user.UserName = c.Query("user_name")
-	token, err := models.StrGetRange(user.UserName)
+	Atoken := c.GetHeader("Authorization")
+	token, err := models.StrGetRange(Atoken)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -17,9 +16,9 @@ func GetOnlineList(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"code":  0,
-			"userName": user.UserName,
-			"token":  token,
+			"code":   0,
+			"userId": token,
+			"token":  Atoken,
 		})
 	}
 }
