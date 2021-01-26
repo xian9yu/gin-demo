@@ -18,7 +18,7 @@ var (
 	cfg                    = c.InitConfig()
 	SecretKey              = cfg.GetString("JWT.SecretKey") // 签名信息应该设置成动态从配置文件中获取
 	ExpireTime             = cfg.GetInt64("JWT.ExpireAt")   // token有效期(时间戳/s)
-
+	Issuer                 = cfg.GetString("JWT.Issuer")    // 签名颁发者
 )
 
 // JWT基本数据结构
@@ -50,8 +50,8 @@ func (j *JWT) GenerateToken(c *gin.Context, user models.User) (string, error) {
 		UserName: user.UserName,
 		StandardClaims: jwt.StandardClaims{
 			//ExpiresAt: int64(time.Now().Unix() + ExpireTime), // 签名过期时间(时间戳/s)
-			Issuer:    "9yu",                                 // 签名颁发者
-			IssuedAt:  time.Now().Unix(),                     //签名时间
+			Issuer:   Issuer,            // 签名颁发者
+			IssuedAt: time.Now().Unix(), //签名时间
 		},
 	}
 
@@ -125,43 +125,4 @@ func (j *JWT) ParseToken(tokenString string) (*Claims, error) {
 
 	return nil, TokenInvalid
 
-}
-
-// 更新token TODO
-//func (j *JWT) RefreshToken(tokenString string) (string, error) {
-//	jwt.TimeFunc = func() time.Time {
-//		return time.Unix(0, 0)
-//	}
-//	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-//		return j.SecretKey, nil
-//	})
-//	if err != nil {
-//		return "", err
-//	}
-//	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
-//		jwt.TimeFunc = time.Now
-//		claims.StandardClaims.ExpiresAt = time.Now().Add(1 * time.Hour).Unix()
-//		return j.CreateToken(claims)
-//	}
-//	return "", TokenInvalid
-//}
-
-//TODO 本来想实现刷新令牌的，但是不知道为什么调用这个方法后所有token都失效了，重新登录生成的token也是无效的
-func (j *JWT) LogoutToken(tokenString string) (string, error) {
-	jwt.TimeFunc = func() time.Time {
-		return time.Unix(0, 0)
-	}
-
-	token, _ := jwt.ParseWithClaims(
-		tokenString, &Claims{},
-		func(token *jwt.Token) (interface{}, error) {
-			return j.SecretKey, nil
-		})
-
-	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
-		//claims.StandardClaims.NotBefore = time.Now().Add(1 * time.Second).Unix()
-		claims.StandardClaims.ExpiresAt = time.Now().Add(24 * time.Hour).Unix()
-		return j.CreateToken(claims)
-	}
-	return "", TokenInvalid
 }

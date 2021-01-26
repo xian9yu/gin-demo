@@ -101,7 +101,7 @@ func StrExists(key string) (res bool, err error) {
 	return res, nil
 }
 
-func StrDel(key, value string) (int64, error) {
+func StrDel(key string) (int64, error) {
 	res, err := Rdb.Del(ctx, key).Result()
 	if err != nil {
 		return res, err
@@ -122,4 +122,12 @@ func StrSetExpireAt(key string, expireTime int64) error {
 		return err
 	}
 	return nil
+}
+func Ttl(key string) (val int, err error) {
+	duration, err := Rdb.TTL(ctx, key).Result()
+	if err != nil {
+		return
+	}
+	val = int(duration / time.Second)
+	return
 }

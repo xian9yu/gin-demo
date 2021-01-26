@@ -1,12 +1,10 @@
 package user
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"github.com/gin-gonic/gin"
 	"jwt/middleware"
 	"jwt/models"
-	"jwt/utils"
+	"jwt/utils/encryption"
 	"net/http"
 	"strconv"
 	"time"
@@ -18,8 +16,8 @@ import (
 func Login(c *gin.Context) {
 	user := new(models.User)
 	user.UserName = c.PostForm("user_name")
-	user.PassWord = c.PostForm("pass_word")
-	user.PassWord = utils.MD5V(user.PassWord) //在model处理会形成循环调用
+	user.PassWord = encryption.GetMd5String(c.PostForm("pass_word"))
+
 	if err := user.Login(); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -41,7 +39,7 @@ func Login(c *gin.Context) {
 					"data":   nil,
 				})
 			}
-			_ = models.StrSetEX(token, strconv.FormatInt(fuser.ID, 10), time.Second*100)
+			_ = models.StrSetEX(encryption.GetMd5String(token), strconv.FormatInt(fuser.ID, 10), time.Second*time.Duration(middleware.ExpireTime))
 			c.JSON(http.StatusOK, gin.H{
 				"status": 0,
 				"msg":    "登陆成功",
@@ -49,10 +47,4 @@ func Login(c *gin.Context) {
 			})
 		}
 	}
-}
-
-func GetMd5String(s string) string {
-	h := md5.New()
-	h.Write([]byte(s))
-	return hex.EncodeToString(h.Sum(nil))
 }

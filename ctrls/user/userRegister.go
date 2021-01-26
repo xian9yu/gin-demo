@@ -3,7 +3,7 @@ package user
 import (
 	"github.com/gin-gonic/gin"
 	"jwt/models"
-	"jwt/utils"
+	"jwt/utils/encryption"
 	"net/http"
 )
 
@@ -11,8 +11,7 @@ import (
 func Register(c *gin.Context) {
 	user := new(models.User)
 	user.UserName = c.Query("user_name")
-	user.PassWord = c.Query("pass_word")
-	user.PassWord = utils.MD5V(user.PassWord)
+	user.PassWord = encryption.GetMd5String(c.Query("pass_word"))
 	err := user.Register(user.UserName)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{

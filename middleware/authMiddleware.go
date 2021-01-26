@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"jwt/models"
+	"jwt/utils/encryption"
 	"net/http"
 	"time"
 )
@@ -21,8 +22,8 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		// 判断 token在 redis中是否存在
-		isExist, err1 := models.StrExists(Authorization)
-		if !isExist || err1 != nil {
+		isExist, errE := models.StrExists(encryption.GetMd5String(Authorization))
+		if !isExist || errE != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"code": -1,
 				"msg":  "token失效，请重新登录",
@@ -30,10 +31,23 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+
+		// 获取 token key的有效时间
+		timeVal,errT:=models.Ttl(encryption.GetMd5String(Authorization))
+		if errT != nil {
+			c.JSON(http.StatusOK,gin.H{
+				"code": -1,
+				"msg":  "获取token有效时间失败",
+			})
+		}
+		// 判断redis中的token有效时间小于配置中设定时间的一半则更新过期时间
+		if timeVal < int(ExpireTime/2) {
+			// 更新 token过期时间
+			_ = models.StrSetExpireAt(encryption.GetMd5String(Authorization), time.Now().Unix()+ExpireTime)
+		}
+
 		j := NewJWT()
 		claims, err := j.ParseToken(Authorization)
-		// 更新 token过期时间
-		_ = models.StrSetExpireAt(Authorization, time.Now().Unix()+100) // TODO 在配置文件中读取时间
 		if err != nil {
 			if err == TokenExpired {
 				c.JSON(http.StatusOK, gin.H{
@@ -50,16 +64,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
-		//refresh := (claims.StandardClaims.ExpiresAt - int64(time.Now().Unix())) < (ExpireTime / 2)
-		//if refresh {
-		//	claims.StandardClaims.ExpiresAt = (time.Now().Unix()+1000)
-		//	tok, _ := j.CreateToken(claims)
-		//	c.JSON(http.StatusOK, gin.H{
-		//		"code": 0,
-		//		"data":  tok,
-		//	})
-		//}
 
 		c.Set("claims", claims)
 	}
