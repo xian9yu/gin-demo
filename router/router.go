@@ -10,7 +10,7 @@ import (
 func InitRouter(router *gin.Engine) {
 
 	router.GET("/register", user.Register)
-	router.Any("/login", user.Login)
+	router.POST("/login", user.Login)
 	router.GET("/token", user.GetTokenInfo)
 
 	//用户

@@ -33,7 +33,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		// 获取 token key的有效时间
-		timeVal,errT:=models.Ttl(encryption.GetMd5String(Authorization))
+		timeVal,errT:= models.Ttl(encryption.GetMd5String(Authorization))
 		if errT != nil {
 			c.JSON(http.StatusOK,gin.H{
 				"code": -1,

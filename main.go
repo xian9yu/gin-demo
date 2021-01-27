@@ -21,7 +21,7 @@ func main() {
 	//初始化router
 	r := gin.Default()
 	router.InitRouter(r)
-
+	//pprof.Register(r)
 	//使用gin自带的异常恢复中间件，避免出现异常时程序退出
 	r.Use(gin.Recovery())
 

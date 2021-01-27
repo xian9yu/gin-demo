@@ -10,18 +10,17 @@ import (
 var (
 	Rdb *redis.Client
 	ctx = context.Background()
-	cfg = c.InitConfig() //初始化配置文件
 )
 
 func InitClient() *redis.Client {
-	hp := cfg.GetString("Redis.HP")
-	pw := cfg.GetString("Redis.Password")
+	addr := conf.GetString("Redis.HP")
+	pwd := conf.GetString("Redis.Password")
 
 	Rdb = redis.NewClient(&redis.Options{
-		Addr:     hp,  // host:port
-		Password: pw,  // set password
-		DB:       0,   // use default DB
-		PoolSize: 100, // 连接池大小
+		Addr:     addr, // host:port
+		Password: pwd,  // set password
+		DB:       0,    // use default DB
+		PoolSize: 100,  // 连接池大小
 	})
 
 	//检测心跳
@@ -34,7 +33,6 @@ func InitClient() *redis.Client {
 
 //执行任意/自定义命令
 func StrDo(function, key string) (interface{}, error) {
-	//val, err := Rdb.Do(ctx, "get", "key").Result()
 	val, err := Rdb.Do(ctx, function, key).Result()
 	if err != nil {
 		return nil, err

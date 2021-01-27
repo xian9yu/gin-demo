@@ -23,28 +23,31 @@ func Login(c *gin.Context) {
 			"code": -1,
 			"msg":  "登录失败",
 		})
+	}
+
+	// 获取用户信息用于生成token
+	if userInfo, errs := user.FindByName(user.UserName); errs != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "用户不存在",
+		})
 	} else {
-		if fuser, errs := user.FindByName(user.UserName); errs != nil {
+		j := middleware.NewJWT()
+		token, err := j.GenerateToken(c, *userInfo)
+		if err != nil {
 			c.JSON(http.StatusOK, gin.H{
-				"code": -1,
-				"msg":  "用户不存在",
-			})
-		} else {
-			j := middleware.NewJWT()
-			token, err := j.GenerateToken(c, *fuser)
-			if err != nil {
-				c.JSON(http.StatusOK, gin.H{
-					"status": -1,
-					"msg":    err.Error(),
-					"data":   nil,
-				})
-			}
-			_ = models.StrSetEX(encryption.GetMd5String(token), strconv.FormatInt(fuser.ID, 10), time.Second*time.Duration(middleware.ExpireTime))
-			c.JSON(http.StatusOK, gin.H{
-				"status": 0,
-				"msg":    "登陆成功",
-				"data":   token,
+				"status": -1,
+				"msg":    err.Error(),
+				"data":   nil,
 			})
 		}
+
+		_ = models.StrSetEX(encryption.GetMd5String(token), strconv.FormatInt(userInfo.ID, 10), time.Second*time.Duration(middleware.ExpireTime))
+		c.JSON(http.StatusOK, gin.H{
+			"status": 0,
+			"msg":    "登陆成功",
+			"data":   token,
+		})
 	}
+
 }

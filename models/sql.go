@@ -14,13 +14,13 @@ import (
 
 var (
 	DB *gorm.DB
-	c  = *utils.NewCfg()
+	conf    = *utils.NewCfg().InitConfig()
 )
 
 //初始化sql
-func InitSQL() (DB *gorm.DB) {
-	cfg := c.InitConfig()
-	dsn := cfg.GetString("MySQL.DataSource")
+func InitSQL() *gorm.DB {
+
+	dsn := conf.GetString("MySQL.DataSource")
 
 	DB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
@@ -30,9 +30,9 @@ func InitSQL() (DB *gorm.DB) {
 		Logger: logger.New(
 			log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 			logger.Config{
-				SlowThreshold: time.Second,   // 慢 SQL 阈值
+				SlowThreshold: time.Second, // 慢 SQL 阈值
 				LogLevel:      logger.Info, // Log level
-				Colorful:      false,         // 禁用彩色打印
+				Colorful:      false,       // 禁用彩色打印
 			},
 		),
 	})
@@ -40,7 +40,7 @@ func InitSQL() (DB *gorm.DB) {
 		panic("MySQL启动异常")
 	}
 
-	if err := DB.AutoMigrate(new(User)); err != nil {
+	if errSync := DB.AutoMigrate(new(User)); errSync != nil {
 		log.Println("同步数据库表失败:", err)
 
 	}

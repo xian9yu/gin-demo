@@ -12,26 +12,19 @@ type User struct {
 	UpdatedAt int64  `gorm:"updated_at"`
 }
 
-//Login
+// 用户登录
 func (u *User) Login() (err error) {
-	//user.PassWord = utils.MD5V(user.PassWord)
 	var user User
 	return DB.Where("user_name = ? AND pass_word = ?", u.UserName, u.PassWord).Take(&user).Error
 }
 
 //用户注册
-func (u *User) Register(username string) (err error) {
-	//md5 加密
-	//user.PassWord = utils.MD5V(user.PassWord)
+func (u *User) Register(username string) error {
 	//如果没有查找到记录则根据结构体创建
-	err = DB.Find(&u, "user_name = ?", username).FirstOrCreate(&u).Error
+	err := DB.Find(&u, "user_name = ?", username).FirstOrCreate(&u).Error
 	if err != nil { // 判断用户名是否注册
 		return errors.New("用户名已注册")
 	}
-
-	////md5 加密
-	//user.PassWord = utils.MD5V(user.PassWord)
-	//err = DB.Create(&user).Error
 	return nil
 }
 
