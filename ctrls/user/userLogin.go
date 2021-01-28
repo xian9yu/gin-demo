@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"jwt/middleware"
 	"jwt/models"
-	"jwt/utils/encryption"
+	"jwt/utils/encrypt"
 	"net/http"
 	"strconv"
 	"time"
@@ -16,7 +16,7 @@ import (
 func Login(c *gin.Context) {
 	user := new(models.User)
 	user.UserName = c.PostForm("user_name")
-	user.PassWord = encryption.GetMd5String(c.PostForm("pass_word"))
+	user.PassWord = encrypt.GetMd5String(c.PostForm("pass_word"))
 
 	if err := user.Login(); err != nil {
 		c.JSON(http.StatusOK, gin.H{
@@ -42,9 +42,9 @@ func Login(c *gin.Context) {
 			})
 		}
 
-		_ = models.StrSetEX(encryption.GetMd5String(token), strconv.FormatInt(userInfo.ID, 10), time.Second*time.Duration(middleware.ExpireTime))
+		_ = models.StrSetEX(encrypt.GetMd5String(token), strconv.FormatInt(userInfo.ID, 10), time.Second*time.Duration(middleware.ExpireTime))
 		c.JSON(http.StatusOK, gin.H{
-			"status": 0,
+			"status": 200,
 			"msg":    "登陆成功",
 			"data":   token,
 		})

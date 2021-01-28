@@ -31,4 +31,11 @@ func InitRouter(router *gin.Engine) {
 	{
 		sv2.GET("/info", ctrls.ServerInfo)
 	}
+	//file
+	file := router.Group("/files/")
+	file.Use(middleware.AuthMiddleware())
+	{
+		file.POST("/upload", ctrls.Upload)
+		file.GET("/download", ctrls.Download)
+	}
 }

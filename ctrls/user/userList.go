@@ -16,7 +16,7 @@ func GetUserList(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"code":  0,
+			"code":  200,
 			"totle": totle,
 			"user":  users,
 		})

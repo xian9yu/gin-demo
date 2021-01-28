@@ -15,9 +15,8 @@ import (
 	"time"
 )
 
-var StartTime = time.Now().Format("2006-01-02 15:04:05")
-
 // @Tags 服务监控
+var StartTime = time.Now()
 
 func ServerInfo(c *gin.Context) {
 	cpuNum := runtime.NumCPU() //核心数
@@ -78,14 +77,12 @@ func ServerInfo(c *gin.Context) {
 		sysOsArch = sysInfo.KernelArch
 	}
 
-	goName := "GoLang"             //语言环境
-	goVersion := runtime.Version() //版本
-	time.Now().Format("2006-01-02 15:04:05")
-	goStartTime := StartTime //启动时间
+	goVersion := runtime.Version() // go环境版本
 
-	goRunTime := GetHourDiffer(StartTime, time.Now().Format("2006-01-02 15:04:05")) //运行时长
-	goHome := runtime.GOROOT()                                                      //安装路径
-	goUserDir := ""                                                                 //项目路径
+	goRunTime := time.Since(StartTime) //运行时长
+
+	goHome := runtime.GOROOT() //安装路径
+	goUserDir := ""            //项目路径
 
 	curDir, err := os.Getwd()
 
@@ -108,8 +105,7 @@ func ServerInfo(c *gin.Context) {
 			}
 		}
 	}
-	type Map = map[string]interface{}
-	res := Map{
+	res := map[string]interface{}{
 		"cpuNum":          cpuNum,
 		"cpuUsed":         cpuUsed,
 		"cpuAvg5":         cpuAvg5,
@@ -126,17 +122,16 @@ func ServerInfo(c *gin.Context) {
 		"sysOsName":       sysOsName,
 		"sysComputerIp":   sysComputerIp,
 		"sysOsArch":       sysOsArch,
-		"goName":          goName,
 		"goVersion":       goVersion,
-		"goStartTime":     goStartTime,
-		"goRunTime":       goRunTime,
+		"goStartTime":     StartTime,
+		"goRunTime":       fmt.Sprintf("%.2f", float64(goRunTime.Seconds())) + "s",
 		"goHome":          goHome,
 		"goUserDir":       goUserDir,
-		"disklist":        disklist,
+		"diskList":        disklist,
 	}
 
 	c.JSON(200, gin.H{
-		"code": 0,
+		"code": 200,
 		"data": res,
 	})
 }
@@ -161,18 +156,4 @@ func GetLocalIP() (ip string, err error) {
 		return ipAddr.IP.String(), nil
 	}
 	return
-}
-
-//获取相差时间
-func GetHourDiffer(startTime, endTime string) int64 {
-	var hour int64
-	t1, err := time.ParseInLocation("2006-01-02 15:04:05", startTime, time.Local)
-	t2, err := time.ParseInLocation("2006-01-02 15:04:05", endTime, time.Local)
-	if err == nil && t1.Before(t2) {
-		diff := t2.Unix() - t1.Unix() //
-		hour = diff / 3600
-		return hour
-	} else {
-		return hour
-	}
 }

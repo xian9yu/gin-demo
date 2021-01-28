@@ -32,7 +32,7 @@ func InitSQL() *gorm.DB {
 			logger.Config{
 				SlowThreshold: time.Second, // 慢 SQL 阈值
 				LogLevel:      logger.Info, // Log level
-				Colorful:      false,       // 禁用彩色打印
+				Colorful:      false,       // 彩色打印
 			},
 		),
 	})

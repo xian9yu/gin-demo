@@ -21,7 +21,7 @@ func FindUserById(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"code": 0,
+			"code": 200,
 			"user": user,
 		})
 	}
@@ -39,7 +39,7 @@ func FindUserByName(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"code": 0,
+			"code": 200,
 			"user": user,
 		})
 	}
@@ -65,7 +65,7 @@ func GetTokenInfo(c *gin.Context) {
 		})
 	case nil:
 		c.JSON(http.StatusOK, gin.H{
-			"code":  0,
+			"code":  200,
 			"token": claims,
 		})
 	default:
