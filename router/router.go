@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"jwt/ctrls"
+	"jwt/ctrls/article"
 	"jwt/ctrls/user"
 	"jwt/middleware"
 )
@@ -13,29 +14,35 @@ func InitRouter(router *gin.Engine) {
 	router.POST("/login", user.Login)
 	router.GET("/token", user.GetTokenInfo)
 
-	//用户
-	sv1 := router.Group("/user/")
-	sv1.Use(middleware.AuthMiddleware())
+	// 用户
+	u := router.Group("/user/")
+	u.Use(middleware.AuthMiddleware())
 	{
-		sv1.GET("/id", user.FindUserById)
-		sv1.GET("/name", user.FindUserByName)
-		sv1.GET("/list", user.GetUserList)
-		sv1.GET("/logout", user.Logout)
-		sv1.GET("/onlineList", user.GetOnlineList)
+		u.GET("/id", user.FindUserById)
+		u.GET("/name", user.FindUserByName)
+		u.GET("/list", user.GetUserList)
+		u.GET("/logout", user.Logout)
+		u.GET("/onlineList", user.GetOnlineList)
 
 	}
-
-	//服务器
-	sv2 := router.Group("/server/")
-	sv2.Use(middleware.AuthMiddleware())
+	// 文章
+	a := router.Group("/article/")
+	a.Use(middleware.AuthMiddleware())
 	{
-		sv2.GET("/info", ctrls.ServerInfo)
+		a.POST("/add", article.Add)
+
+	}
+	//服务器
+	s := router.Group("/server/")
+	s.Use(middleware.AuthMiddleware())
+	{
+		s.GET("/info", ctrls.ServerInfo)
 	}
 	//file
 	file := router.Group("/files/")
 	file.Use(middleware.AuthMiddleware())
 	{
-		file.POST("/upload", ctrls.Upload)
-		file.GET("/download", ctrls.Download)
+		//file.POST("/upload", ctrls.Upload)
+		//file.GET("/download", ctrls.Download)
 	}
 }
