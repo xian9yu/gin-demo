@@ -22,3 +22,12 @@ func Date2Timestamp(datetime string) int64 {
 func Timestamp2Date(timestamp int64) string {
 	return time.Unix(timestamp, 0).Format("2006-01-02 15:04:05")
 }
+
+// 秒转换为时分秒
+func FormatSecond(seconds int64) (day, hour, minute, second int64) {
+	day = seconds / (24 * 3600)
+	hour = (seconds - day*3600*24) / 3600
+	minute = (seconds - day*24*3600 - hour*3600) / 60
+	second = seconds - day*24*3600 - hour*3600 - minute*60
+	return day, hour, minute, second
+}
