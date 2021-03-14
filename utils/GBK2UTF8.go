@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
-	"io/ioutil"
+	"io"
 )
 
 func GbkToUtf8(str []byte) (b []byte, err error) {
 	r := transform.NewReader(bytes.NewReader(str), simplifiedchinese.GBK.NewDecoder())
-	b, err = ioutil.ReadAll(r)
+	b, err = io.ReadAll(r)
 	if err != nil {
 		return
 	}
@@ -19,7 +19,7 @@ func GbkToUtf8(str []byte) (b []byte, err error) {
 // transform UTF-8 bytes to GBK bytes
 func Utf8ToGbk(str []byte) (b []byte, err error) {
 	r := transform.NewReader(bytes.NewReader(str), simplifiedchinese.GBK.NewEncoder())
-	b, err = ioutil.ReadAll(r)
+	b, err = io.ReadAll(r)
 	if err != nil {
 		return
 	}
