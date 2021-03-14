@@ -22,3 +22,9 @@ func String2Float64(str string) float64 {
 	floatNum, _ := strconv.ParseFloat(str, 64)
 	return floatNum
 }
+
+// 字符串转bool
+func String2Bool(str string) bool {
+	boolVal, _ := strconv.ParseBool(str)
+	return boolVal
+}

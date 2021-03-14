@@ -4,15 +4,18 @@ go 1.16
 
 require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
+	github.com/alibabacloud-go/darabonba-openapi v0.1.5
+	github.com/alibabacloud-go/dysmsapi-20170525/v2 v2.0.1
+	github.com/alibabacloud-go/tea v1.1.15
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/go-redis/redis/v8 v8.4.11
 	github.com/golang/protobuf v1.4.3 // indirect
-	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mssola/user_agent v0.5.2
+	github.com/qiniu/go-sdk/v7 v7.9.1
 	github.com/shirou/gopsutil v3.20.12+incompatible
 	github.com/spf13/viper v1.7.1
 	github.com/ugorji/go v1.2.1 // indirect
