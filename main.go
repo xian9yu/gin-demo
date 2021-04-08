@@ -1,11 +1,11 @@
 package main
 
 import (
+	"9YuBlog/middleware"
+	"9YuBlog/models"
+	"9YuBlog/router"
+	"9YuBlog/utils"
 	"github.com/gin-gonic/gin"
-	"jwt/middleware"
-	"jwt/models"
-	"jwt/router"
-	"jwt/utils"
 	"log"
 )
 
@@ -13,7 +13,7 @@ var conf = utils.NewCfg().InitConfig() // 初始化配置文件
 
 func main() {
 
-	models.DB = models.InitSQL()     //初始化sql
+	models.DB = models.InitSQL()    //初始化sql
 	models.Rdb = models.InitRedis() //初始化 redis
 
 	//初始化router

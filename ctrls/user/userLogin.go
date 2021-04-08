@@ -2,9 +2,9 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-	"jwt/middleware"
-	"jwt/models"
-	"jwt/utils/encrypt"
+	"9YuBlog/middleware"
+	"9YuBlog/models"
+	"9YuBlog/utils/encrypt"
 	"net/http"
 	"strconv"
 	"time"

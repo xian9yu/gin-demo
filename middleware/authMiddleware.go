@@ -1,9 +1,9 @@
 package middleware
 
 import (
+	"9YuBlog/models"
+	"9YuBlog/utils/encrypt"
 	"github.com/gin-gonic/gin"
-	"jwt/models"
-	"jwt/utils/encrypt"
 	"net/http"
 	"time"
 )

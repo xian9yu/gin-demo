@@ -1,11 +1,11 @@
 package middleware
 
 import (
+	"9YuBlog/models"
+	"9YuBlog/utils"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"jwt/models"
-	"jwt/utils"
 	"time"
 )
 

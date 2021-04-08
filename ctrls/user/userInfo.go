@@ -1,9 +1,9 @@
 package user
 
 import (
+	"9YuBlog/middleware"
+	"9YuBlog/models"
 	"github.com/gin-gonic/gin"
-	"jwt/middleware"
-	"jwt/models"
 	"net/http"
 	"strconv"
 )

@@ -1,9 +1,9 @@
 package user
 
 import (
+	"9YuBlog/models"
 	"github.com/gin-gonic/gin"
 	"github.com/mssola/user_agent"
-	"jwt/models"
 	"net/http"
 )
 

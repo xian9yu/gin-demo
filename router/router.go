@@ -1,11 +1,11 @@
 package router
 
 import (
+	"9YuBlog/ctrls"
+	"9YuBlog/ctrls/article"
+	"9YuBlog/ctrls/user"
+	"9YuBlog/middleware"
 	"github.com/gin-gonic/gin"
-	"jwt/ctrls"
-	"jwt/ctrls/article"
-	"jwt/ctrls/user"
-	"jwt/middleware"
 )
 
 func InitRouter(router *gin.Engine) {

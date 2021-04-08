@@ -2,7 +2,7 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
-	"jwt/models"
+	"9YuBlog/models"
 	"net/http"
 )
 
