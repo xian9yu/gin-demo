@@ -10,9 +10,9 @@ import (
 // Register 用户注册
 func Register(c *gin.Context) {
 	user := new(models.User)
-	user.UserName = c.Query("user_name")
-	user.PassWord = encrypt.GetMd5String(c.Query("pass_word"))
-	err := user.Register(user.UserName)
+	user.Username = c.Query("user_name")
+	user.Password = encrypt.GetMd5String(c.Query("pass_word"))
+	err := user.Register(user.Username)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,

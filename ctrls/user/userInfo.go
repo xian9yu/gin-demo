@@ -31,9 +31,9 @@ func FindUserById(c *gin.Context) {
 // FindUserByName 通过用户名查找用户
 func FindUserByName(c *gin.Context) {
 	user := new(models.User)
-	user.UserName = c.Query("user_name")
+	user.Username = c.Query("user_name")
 
-	user, err := user.FindByName(user.UserName)
+	user, err := user.FindByName(user.Username)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,

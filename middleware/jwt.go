@@ -47,8 +47,8 @@ func NewJWT() *JWT {
 func (j *JWT) GenerateToken(c *gin.Context, user models.User) (string, error) {
 	// 构造用户claims信息(负荷)
 	claims := &Claims{
-		Id:       user.ID,
-		UserName: user.UserName,
+		Id:       user.Id,
+		UserName: user.Username,
 		StandardClaims: jwt.StandardClaims{
 			//ExpiresAt: int64(time.Now().Unix() + ExpireTime), // 签名过期时间(时间戳/s)
 			Issuer:   Issuer,            // 签名颁发者

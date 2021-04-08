@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/gin-gonic/gin"
 	"9YuBlog/models"
+	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
