@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// Logout 用户退出
 func Logout(c *gin.Context) {
 	Authorization := c.Request.Header.Get("Authorization")
 

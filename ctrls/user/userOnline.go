@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// GetOnlineList 在线列表
 func GetOnlineList(c *gin.Context) {
 	Atoken := c.GetHeader("Authorization")
 	//userAgent := c.GetHeader("User-Agent")

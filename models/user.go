@@ -12,13 +12,13 @@ type User struct {
 	UpdatedAt int64  `gorm:"updated_at"`
 }
 
-// 用户登录
+// Login 用户登录
 func (u *User) Login() (err error) {
 	var user User
 	return DB.Where("user_name = ? AND pass_word = ?", u.UserName, u.PassWord).Take(&user).Error
 }
 
-//用户注册
+// Register 用户注册
 func (u *User) Register(username string) error {
 	//如果没有查找到记录则根据结构体创建
 	err := DB.Find(&u, "user_name = ?", username).FirstOrCreate(&u).Error
@@ -40,7 +40,6 @@ func (u *User) FindByName(username string) (users *User, err error) {
 	return &user, err
 }
 
-//get List
 func (u *User) GetList() (total int64, list []User, err error) {
 	var userList []User
 

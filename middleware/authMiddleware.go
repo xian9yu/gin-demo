@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// AuthMiddleware 中间件
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		Authorization := c.Request.Header.Get("Authorization")

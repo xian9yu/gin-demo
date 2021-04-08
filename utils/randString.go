@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// 随机生成指定长度的大写字母和数字的组合
+// RandomString 随机生成指定长度的大写字母和数字的组合
 func RandomString(l int) string {
 	str := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	bytes := []byte(str)

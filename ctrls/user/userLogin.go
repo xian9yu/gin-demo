@@ -12,7 +12,7 @@ import (
 
 //var expireTime int64 = 600 // token有效期(时间戳/s)
 
-//用户登录
+// Login 用户登录
 func Login(c *gin.Context) {
 	user := new(models.User)
 	user.UserName = c.PostForm("user_name")

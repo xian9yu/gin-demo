@@ -8,6 +8,7 @@ import (
 	"strconv"
 )
 
+// FindUserById 通过id查找用户
 func FindUserById(c *gin.Context) {
 	user := new(models.User)
 	ids := c.Query("id")
@@ -27,6 +28,7 @@ func FindUserById(c *gin.Context) {
 	}
 }
 
+// FindUserByName 通过用户名查找用户
 func FindUserByName(c *gin.Context) {
 	user := new(models.User)
 	user.UserName = c.Query("user_name")
@@ -45,6 +47,7 @@ func FindUserByName(c *gin.Context) {
 	}
 }
 
+// GetTokenInfo 解析toke
 func GetTokenInfo(c *gin.Context) {
 	Authorization := c.Request.Header.Get("Authorization")
 

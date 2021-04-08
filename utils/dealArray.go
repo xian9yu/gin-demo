@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-//判断元素是否在数组中
-func IsContain(items []string, item string) bool {
+// IsContainString 判断元素是否在数组中
+func IsContainString(items []string, item string) bool {
 	for _, eachItem := range items {
 		if eachItem == item {
 			return true
@@ -16,7 +16,7 @@ func IsContain(items []string, item string) bool {
 	return false
 }
 
-//判断元素是否在数组中
+// IsContainInt64 判断元素是否在数组中
 func IsContainInt64(items []int64, item int64) bool {
 	for _, eachItem := range items {
 		if eachItem == item {
@@ -26,15 +26,12 @@ func IsContainInt64(items []int64, item int64) bool {
 	return false
 }
 
-/**
- *将查询出来的数组转成字符串格式
-	example:[1,2,3] => "1,2,3"
-*/
+// IdsToString 将查询出来的数组转成字符串格式 example:[1,2,3] => "1,2,3"
 func IdsToString(ids []int64) string {
 	return strings.Replace(strings.Trim(fmt.Sprint(ids), "[]"), " ", ",", -1)
 }
 
-//去除id为0的元素
+// StringIdsToString 去除id为0的元素
 func StringIdsToString(ids []string) string {
 	var newIds []string
 	for _, v := range ids {
@@ -45,10 +42,7 @@ func StringIdsToString(ids []string) string {
 	return strings.Replace(strings.Trim(fmt.Sprint(newIds), "[]"), " ", ",", -1)
 }
 
-/*
- * 去除数组中相同元素
- */
-//这种发放适用于string,int,float等切片，会对切片中的元素进行排序
+// SliceRemoveDuplicates 去除数组中相同元素,这种发放适用于string,int,float等切片，会对切片中的元素进行排序
 func SliceRemoveDuplicates(slice []string) []string {
 	sort.Strings(slice)
 	i := 0
@@ -66,7 +60,7 @@ func SliceRemoveDuplicates(slice []string) []string {
 	return slice
 }
 
-//去除数组中相同元素
+// RemoveDuplicate 去除数组中相同元素
 func RemoveDuplicate(list *[]int64) []int64 {
 	var x []int64
 	for _, i := range *list {

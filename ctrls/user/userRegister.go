@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-//用户注册
+// Register 用户注册
 func Register(c *gin.Context) {
 	user := new(models.User)
 	user.UserName = c.Query("user_name")

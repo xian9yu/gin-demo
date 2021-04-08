@@ -15,7 +15,7 @@ type SmsInfo struct {
 	TemplateParam   string `json:"template_param"` // 验证码（golang只需传code，完整短信在阿里云后台设置）
 }
 
-// 阿里云发送短信
+// AliSendSMS 阿里云发送短信
 func AliSendSMS(sms SmsInfo, phoneNumber, code string) error {
 	config := &openapi.Config{
 		AccessKeyId:     tea.String(sms.AccessKeyId),     // AccessKey ID

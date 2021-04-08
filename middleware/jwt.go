@@ -22,12 +22,13 @@ var (
 )
 
 // JWT基本数据结构
-// 签名的signkey
+// 签名的signKey
+
 type JWT struct {
 	SecretKey []byte
 }
 
-// 定义载荷
+// Claims 定义载荷
 type Claims struct {
 	Id       int64  `json:"id"`
 	UserName string `json:"user_name"`
@@ -35,14 +36,14 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-// 初始化JWT实例
+// NewJWT 初始化JWT实例
 func NewJWT() *JWT {
 	return &JWT{
 		[]byte(SecretKey),
 	}
 }
 
-// token生成器
+// GenerateToken token生成器
 func (j *JWT) GenerateToken(c *gin.Context, user models.User) (string, error) {
 	// 构造用户claims信息(负荷)
 	claims := &Claims{
@@ -60,7 +61,7 @@ func (j *JWT) GenerateToken(c *gin.Context, user models.User) (string, error) {
 
 }
 
-// 创建Token(基于用户的基本信息claims)
+// CreateToken 创建Token(基于用户的基本信息claims)
 // 使用HS256算法进行token生成
 // 使用用户基本信息claims以及签名key(signkey)生成token
 func (j *JWT) CreateToken(u *Claims) (string, error) {
@@ -86,7 +87,7 @@ func (j *JWT) CreateToken(u *Claims) (string, error) {
 //	return token, err
 //}
 
-// token解析
+// ParseToken token解析
 // Couldn't handle this token:
 func (j *JWT) ParseToken(tokenString string) (*Claims, error) {
 	// https://gowalker.org/github.com/dgrijalva/jwt-go#ParseWithClaims

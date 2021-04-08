@@ -17,7 +17,7 @@ var (
 	conf    = *utils.NewCfg().InitConfig()
 )
 
-//初始化sql
+// InitSQL 初始化sql
 func InitSQL() *gorm.DB {
 
 	dsn := conf.GetString("MySQL.DataSource")

@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// GetUserList 获取用户列表
 func GetUserList(c *gin.Context) {
 	var user models.User
 	totle, users, err := user.GetList()

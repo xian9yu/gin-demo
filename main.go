@@ -14,7 +14,7 @@ var conf = utils.NewCfg().InitConfig() // 初始化配置文件
 func main() {
 
 	models.DB = models.InitSQL()     //初始化sql
-	models.Rdb = models.InitClient() //初始化 redis
+	models.Rdb = models.InitRedis() //初始化 redis
 
 	//初始化router
 	r := gin.Default()

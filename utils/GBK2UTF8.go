@@ -16,7 +16,7 @@ func GbkToUtf8(str []byte) (b []byte, err error) {
 	return
 }
 
-// transform UTF-8 bytes to GBK bytes
+// Utf8ToGbk transform UTF-8 bytes to GBK bytes
 func Utf8ToGbk(str []byte) (b []byte, err error) {
 	r := transform.NewReader(bytes.NewReader(str), simplifiedchinese.GBK.NewEncoder())
 	b, err = io.ReadAll(r)

@@ -16,7 +16,7 @@ type IpInfo struct {
 	Addr     string `json:"addr"`     // 运营商
 }
 
-// 返回：IP地址的信息（格式：字符串的json）
+// GetCityByIp 返回：IP地址的信息（格式：字符串的json）
 func GetCityByIp(ipAddr string) string {
 	if ipAddr == "[::1]" || ipAddr == "127.0.0.1" {
 		return "内网IP"
@@ -35,7 +35,7 @@ func GetCityByIp(ipAddr string) string {
 	return ip.City
 }
 
-// 返回：IP地址的信息(结构体)
+// IPInfo 返回：IP地址的信息(结构体)
 func IPInfo(ipAddr string) (ip IpInfo) {
 	if ipAddr == "[::1]" || ipAddr == "127.0.0.1" {
 		ip.City = "内网IP"

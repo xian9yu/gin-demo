@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-// @Tags 服务监控
+// StartTime @Tags 服务监控
 var StartTime = time.Now()
 
 func ServerInfo(c *gin.Context) {
@@ -25,7 +25,7 @@ func ServerInfo(c *gin.Context) {
 	var cpuAvg5 float64 = 0  //CPU负载5
 	var cpuAvg15 float64 = 0 //当前空闲率
 
-	cpuInfo, err := cpu.Percent(time.Duration(time.Second), false)
+	cpuInfo, err := cpu.Percent(time.Second, false)
 	if err == nil {
 		cpuUsed, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", cpuInfo[0]), 64)
 	}
@@ -54,9 +54,9 @@ func ServerInfo(c *gin.Context) {
 	var goFree uint64 = 0   //go剩余的内存数
 	var goUsage float64 = 0 //使用率
 
-	var gomem runtime.MemStats
-	runtime.ReadMemStats(&gomem)
-	goUsed = gomem.Sys / 1024 / 1024
+	var goMem runtime.MemStats
+	runtime.ReadMemStats(&goMem)
+	goUsed = goMem.Sys / 1024 / 1024
 	goUsage = float64(goUsed) / float64(memTotal) * 100
 	sysComputerIp := "" //服务器IP
 
@@ -91,7 +91,7 @@ func ServerInfo(c *gin.Context) {
 	}
 
 	//服务器磁盘信息
-	disklist := make([]disk.UsageStat, 0)
+	diskList := make([]disk.UsageStat, 0)
 	diskInfo, err := disk.Partitions(true) //所有分区
 	if err == nil {
 		for _, p := range diskInfo {
@@ -101,7 +101,7 @@ func ServerInfo(c *gin.Context) {
 				diskDetail.Total = diskDetail.Total / 1024 / 1024
 				diskDetail.Used = diskDetail.Used / 1024 / 1024
 				diskDetail.Free = diskDetail.Free / 1024 / 1024
-				disklist = append(disklist, *diskDetail)
+				diskList = append(diskList, *diskDetail)
 			}
 		}
 	}
@@ -124,10 +124,10 @@ func ServerInfo(c *gin.Context) {
 		"sysOsArch":       sysOsArch,
 		"goVersion":       goVersion,
 		"goStartTime":     StartTime,
-		"goRunTime":       fmt.Sprintf("%.2f", float64(goRunTime.Seconds())) + "s",
+		"goRunTime":       fmt.Sprintf("%.2f", goRunTime.Seconds()) + "s",
 		"goHome":          goHome,
 		"goUserDir":       goUserDir,
-		"diskList":        disklist,
+		"diskList":        diskList,
 	}
 
 	c.JSON(200, gin.H{
@@ -136,7 +136,7 @@ func ServerInfo(c *gin.Context) {
 	})
 }
 
-//服务端ip
+// GetLocalIP 服务端ip
 func GetLocalIP() (ip string, err error) {
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
