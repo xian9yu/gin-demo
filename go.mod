@@ -17,6 +17,7 @@ require (
 	github.com/mssola/user_agent v0.5.2
 	github.com/qiniu/go-sdk/v7 v7.9.1
 	github.com/shirou/gopsutil v3.20.12+incompatible
+	github.com/shopspring/decimal v1.2.0
 	github.com/spf13/viper v1.7.1
 	github.com/ugorji/go v1.2.1 // indirect
 	golang.org/x/crypto v0.0.0-20201208171446-5f87f3452ae9 // indirect
