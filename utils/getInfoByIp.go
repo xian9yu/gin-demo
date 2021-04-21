@@ -2,7 +2,7 @@ package utils
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 )
@@ -16,7 +16,7 @@ type IpInfo struct {
 	Addr     string `json:"addr"`     // 运营商
 }
 
-// 返回：IP地址的信息（格式：字符串的json）
+// GetCityByIp 返回：IP地址的信息（格式：字符串的json）
 func GetCityByIp(ipAddr string) string {
 	if ipAddr == "[::1]" || ipAddr == "127.0.0.1" {
 		return "内网IP"
@@ -25,7 +25,7 @@ func GetCityByIp(ipAddr string) string {
 	client := http.Client{Timeout: 5 * time.Second}
 	r, _ := client.Get(`http://whois.pconline.com.cn/ipJson.jsp?json=true&ip=` + ipAddr)
 
-	body, _ := ioutil.ReadAll(r.Body)
+	body, _ := io.ReadAll(r.Body)
 	res, _ := GbkToUtf8(body) // 转换编码格式 (return:[]bytes,error)
 	_ = json.Unmarshal(res, &ip)
 	if ip.City == "" {
@@ -35,7 +35,7 @@ func GetCityByIp(ipAddr string) string {
 	return ip.City
 }
 
-// 返回：IP地址的信息(结构体)
+// IPInfo 返回：IP地址的信息(结构体)
 func IPInfo(ipAddr string) (ip IpInfo) {
 	if ipAddr == "[::1]" || ipAddr == "127.0.0.1" {
 		ip.City = "内网IP"
@@ -44,7 +44,7 @@ func IPInfo(ipAddr string) (ip IpInfo) {
 	client := http.Client{Timeout: 5 * time.Second}
 	r, _ := client.Get(`http://whois.pconline.com.cn/ipJson.jsp?json=true&ip=` + ipAddr)
 
-	body, _ := ioutil.ReadAll(r.Body)
+	body, _ := io.ReadAll(r.Body)
 	res, _ := GbkToUtf8(body) // 转换编码格式 (return:[]bytes,error)
 	if err := json.Unmarshal(res, &ip); err != nil {
 		return ip

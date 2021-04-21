@@ -1,11 +1,12 @@
 package user
 
 import (
+	"9YuBlog/models"
 	"github.com/gin-gonic/gin"
-	"jwt/models"
 	"net/http"
 )
 
+// GetUserList 获取用户列表
 func GetUserList(c *gin.Context) {
 	var user models.User
 	totle, users, err := user.GetList()

@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 )
 
-//SHA256生成哈希值
+// GetSHA256HashCode SHA256生成哈希值
 func GetSHA256HashCode(message []byte) string {
 	//方法一：
 	//创建一个基于SHA256算法的hash.Hash接口的对象

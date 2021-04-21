@@ -11,6 +11,7 @@ import (
 )
 
 //TODO :viper bug：添加多路径配置文件的时候不能通过结构体读取config文件
+
 func NewCfg() *Config {
 	return &Config{}
 }
@@ -35,7 +36,7 @@ type Config struct {
 //	unMarshalError = errors.New("解析配置文件失败")
 //)
 
-//获取相对路径
+// 获取相对路径
 func getCurrentDirectory() string {
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {

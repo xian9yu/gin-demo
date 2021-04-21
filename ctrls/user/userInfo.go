@@ -1,13 +1,14 @@
 package user
 
 import (
+	"9YuBlog/middleware"
+	"9YuBlog/models"
 	"github.com/gin-gonic/gin"
-	"jwt/middleware"
-	"jwt/models"
 	"net/http"
 	"strconv"
 )
 
+// FindUserById 通过id查找用户
 func FindUserById(c *gin.Context) {
 	user := new(models.User)
 	ids := c.Query("id")
@@ -27,11 +28,12 @@ func FindUserById(c *gin.Context) {
 	}
 }
 
+// FindUserByName 通过用户名查找用户
 func FindUserByName(c *gin.Context) {
 	user := new(models.User)
-	user.UserName = c.Query("user_name")
+	user.Username = c.Query("user_name")
 
-	user, err := user.FindByName(user.UserName)
+	user, err := user.FindByName(user.Username)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -45,6 +47,7 @@ func FindUserByName(c *gin.Context) {
 	}
 }
 
+// GetTokenInfo 解析toke
 func GetTokenInfo(c *gin.Context) {
 	Authorization := c.Request.Header.Get("Authorization")
 

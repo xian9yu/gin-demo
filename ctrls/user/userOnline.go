@@ -1,12 +1,13 @@
 package user
 
 import (
+	"9YuBlog/models"
 	"github.com/gin-gonic/gin"
 	"github.com/mssola/user_agent"
-	"jwt/models"
 	"net/http"
 )
 
+// GetOnlineList 在线列表
 func GetOnlineList(c *gin.Context) {
 	Atoken := c.GetHeader("Authorization")
 	//userAgent := c.GetHeader("User-Agent")

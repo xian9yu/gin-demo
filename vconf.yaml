@@ -3,8 +3,7 @@ ListenOn: #服务监听 host,port
   Port: 1023
 
 MySQL: #数据库
-  DataSource: gggorm:gggorm@tcp(155.94.128.55:3306)/gggorm?charset=utf8
-#  DataSource: gggorm:gggorm@tcp(127.0.0.1:3306)/gggorm?charset=utf8
+  DataSource: gggorm:gggorm@tcp(127.0.0.1:3306)/gggorm?charset=utf8
 Redis:
   HP: localhost:6379
   Password:
