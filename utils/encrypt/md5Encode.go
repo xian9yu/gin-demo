@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 )
 
-const md5Key = "shuishishuideshui"
+const md5Key = "thisIsMd5SecureKey"
 
 // GetMd5String 生成32位md5字串
 func GetMd5String(s string) string {

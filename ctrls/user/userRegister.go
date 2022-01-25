@@ -9,11 +9,17 @@ import (
 
 // Register 用户注册
 func Register(c *gin.Context) {
+	if len(c.Query("password")) < 1 || len(c.Query("mail")) < 1 {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "邮箱或密码为空",
+		})
+	}
 	user := new(models.User)
-	user.Username = c.Query("user_name")
-	user.Password = encrypt.GetMd5String(c.Query("pass_word"))
-	err := user.Register(user.Username)
-	if err != nil {
+	user.Username = c.Query("mail")
+	user.Password = encrypt.GetMd5String(c.Query("password"))
+	rowsAffected, uid, err := user.Register(user)
+	if err != nil || rowsAffected < 1 {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  err,
@@ -21,7 +27,7 @@ func Register(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"code": 200,
-			"msg":  "注册成功",
+			"msg":  "注册成功<uid>=" + string(uid),
 		})
 	}
 }

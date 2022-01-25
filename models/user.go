@@ -1,14 +1,14 @@
 package models
 
 type User struct {
-	Uid         uint64 `json:"uid" gorm:"primaryKey,unique,notnull,comment:用户id"`
-	Username    string `json:"username" gorm:"comment:用户名"`
-	Mail        string `json:"mail" gorm:"notnull,comment:邮箱"`
-	Password    string `json:"-"  gorm:"notnull,comment:用户登录密码"`
-	Url         string `json:"url" gorm:"comment:网站url"`
-	Group       string `json:"group" gorm:" notnull,comment:用户分组"`
-	CreatedTime uint64 `json:"created_time" gorm:"autoCreateTime,notnull comment:user创建时间"`
-	UpdatedTime uint64 `json:"updated_time" gorm:"autoUpdateTime,comment:上一次修改信息时间"`
+	Uid         uint64 `json:"uid" gorm:"size:12;primaryKey;unique;notnull;comment:用户id"`
+	Username    string `json:"username" gorm:"size:60;comment:用户名"`
+	Mail        string `json:"mail" gorm:"size:60;notnull;comment:邮箱"`
+	Password    string `json:"-"  gorm:"size:33;notnull;comment:用户登录密码"`
+	Url         string `json:"url" gorm:"size:60;comment:网站url"`
+	Group       string `json:"group" gorm:"size:33;notnull;comment:用户分组"`
+	CreatedTime uint64 `json:"created_time" gorm:"autoCreateTime;notnull comment:user创建时间"`
+	UpdatedTime uint64 `json:"updated_time" gorm:"autoUpdateTime;comment:上一次修改信息时间"`
 	LastLogin   uint64 `json:"last_login" gorm:"comment:上一次登录时间"`
 }
 
@@ -19,9 +19,9 @@ func (u *User) Login() (err error) {
 }
 
 // Register 用户注册
-func (u *User) Register(username string) (err error) {
-	err = DB.Find(&u, "user_name = ?", username).Create(&u).Error
-	return err
+func (u *User) Register(user *User) (int64, uint64, error) {
+	result := DB.Create(&user)
+	return result.RowsAffected, user.Uid, result.Error
 }
 
 func (u *User) FindById(id int) (users *User, err error) {
