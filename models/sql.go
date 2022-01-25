@@ -1,7 +1,7 @@
 package models
 
 import (
-	"9YuBlog/utils"
+	"gin-demo/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -37,10 +37,10 @@ func InitSQL() *gorm.DB {
 		),
 	})
 	if err != nil {
-		panic("MySQL启动异常")
+		log.Fatalln("MySQL启动异常")
 	}
 
-	if err = DB.AutoMigrate(&User{}, &Article{}); err != nil {
+	if err = DB.AutoMigrate(&User{}); err != nil {
 		log.Println("同步数据库表失败:", err.Error())
 
 	}

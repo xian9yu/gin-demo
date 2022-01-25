@@ -1,16 +1,15 @@
 package models
 
 type User struct {
-	Id       int64  `json:"id" gorm:"primaryKey,comment:用户id"`
-	Username  string `json:"username" gorm:"comment:用户登录名"`
-	Password  string `json:"-"  gorm:"comment:用户登录密码"`
-	Mail      string `json:"mail" gorm:"comment:邮箱"`
-	Url       string `json:"url" gorm:"comment:网站url"`
-	Nickname  string `json:"nickname" gorm:"comment:用户显示名称"`
-	Group     string `json:"group" gorm:"comment:用户分组"`
-	CreatedAt int64  `gorm:"created_at" gorm:"comment:创建时间"`
-	UpdatedAt int64  `gorm:"updated_at" gorm:"comment:上一次修改信息时间"`
-	Logged    int64  `json:"logged" gorm:"comment:上一次登录时间"`
+	Uid         uint64 `json:"uid" gorm:"primaryKey,unique,notnull,comment:用户id"`
+	Username    string `json:"username" gorm:"comment:用户名"`
+	Mail        string `json:"mail" gorm:"notnull,comment:邮箱"`
+	Password    string `json:"-"  gorm:"notnull,comment:用户登录密码"`
+	Url         string `json:"url" gorm:"comment:网站url"`
+	Group       string `json:"group" gorm:" notnull,comment:用户分组"`
+	CreatedTime uint64 `json:"created_time" gorm:"autoCreateTime,notnull comment:user创建时间"`
+	UpdatedTime uint64 `json:"updated_time" gorm:"autoUpdateTime,comment:上一次修改信息时间"`
+	LastLogin   uint64 `json:"last_login" gorm:"comment:上一次登录时间"`
 }
 
 // Login 用户登录
@@ -21,14 +20,13 @@ func (u *User) Login() (err error) {
 
 // Register 用户注册
 func (u *User) Register(username string) (err error) {
-	//如果没有查找到记录则根据结构体创建
 	err = DB.Find(&u, "user_name = ?", username).Create(&u).Error
 	return err
 }
 
 func (u *User) FindById(id int) (users *User, err error) {
 	var user User
-	err = DB.Where("`id` = ?", id).First(&user).Error
+	err = DB.Where("`id` = ?", id).Find(&user).Error
 	return &user, err
 }
 
@@ -38,10 +36,20 @@ func (u *User) FindByName(username string) (users *User, err error) {
 	return &user, err
 }
 
-func (u *User) GetList() (total int64, list []User, err error) {
+func (u *User) GetAll() (total int64, list []User, err error) {
 	var userList []User
 
 	err = DB.Model(&u).Count(&total).Error
 	err = DB.Find(&userList).Error
 	return total, userList, err
+}
+
+type info interface {
+	int | string
+}
+
+func GetInfoBy[T info](query string, v T) (users *User, err error) {
+	var user User
+	err = DB.Where("`"+query+"` = ?", v).Find(&user).Error
+	return &user, err
 }

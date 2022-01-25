@@ -1,10 +1,10 @@
 package router
 
 import (
-	"9YuBlog/ctrls"
-	"9YuBlog/ctrls/article"
-	"9YuBlog/ctrls/user"
-	"9YuBlog/middleware"
+	"gin-demo/ctrls"
+	"gin-demo/ctrls/article"
+	"gin-demo/ctrls/user"
+	"gin-demo/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,11 +18,10 @@ func InitRouter(router *gin.Engine) {
 	u := router.Group("/user/")
 	u.Use(middleware.AuthMiddleware())
 	{
-		u.GET("/id", user.FindUserById)
-		u.GET("/name", user.FindUserByName)
+		u.GET("/id", user.GetInfoById)
+		u.GET("/name", user.GetInfoByName)
 		u.GET("/list", user.GetUserList)
 		u.GET("/logout", user.Logout)
-		u.GET("/onlineList", user.GetOnlineList)
 
 	}
 	// 文章

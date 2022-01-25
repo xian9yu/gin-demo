@@ -1,13 +1,9 @@
 ListenOn: #服务监听 host,port
   Host: 0.0.0.0
-  Port: 1023
+  Port: 1234
 
 MySQL: #数据库
-  DataSource: gggorm:gggorm@tcp(127.0.0.1:3306)/gggorm?charset=utf8
+  DataSource: gggorm:gggorm@tcp(192.168.31.246:3306)/gggorm?charset=utf8
 Redis:
-  HP: localhost:6379
+  HP: 192.168.31.246:6379
   Password:
-JWT:
-  SecretKey: zhe_shi_secretKey
-  ExpireAt: 86400
-  Issuer: xian9Yu

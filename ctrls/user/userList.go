@@ -1,7 +1,7 @@
 package user
 
 import (
-	"9YuBlog/models"
+	"gin-demo/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -9,7 +9,7 @@ import (
 // GetUserList 获取用户列表
 func GetUserList(c *gin.Context) {
 	var user models.User
-	totle, users, err := user.GetList()
+	total, users, err := user.GetAll()
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -18,7 +18,7 @@ func GetUserList(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"code":  200,
-			"totle": totle,
+			"total": total,
 			"user":  users,
 		})
 	}

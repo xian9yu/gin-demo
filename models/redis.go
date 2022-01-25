@@ -9,7 +9,7 @@ import (
 
 var (
 	Rdb *redis.Client
-	ctx = context.Background()
+	Ctx = context.Background()
 )
 
 func InitRedis() *redis.Client {
@@ -18,13 +18,13 @@ func InitRedis() *redis.Client {
 
 	Rdb = redis.NewClient(&redis.Options{
 		Addr:     addr, // host:port
-		Password: "xyf123456",  // set password
+		Password: "",   // set password
 		DB:       0,    // use default DB
 		PoolSize: 100,  // 连接池大小
 	})
 
 	//检测心跳
-	_, err := Rdb.Ping(ctx).Result()
+	_, err := Rdb.Ping(Ctx).Result()
 	if err != nil {
 		log.Fatalln("redis 连接失败 error:", err)
 	}
@@ -33,7 +33,7 @@ func InitRedis() *redis.Client {
 
 // StrDo 执行任意/自定义命令
 func StrDo(function, key string) (interface{}, error) {
-	val, err := Rdb.Do(ctx, function, key).Result()
+	val, err := Rdb.Do(Ctx, function, key).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func StrDo(function, key string) (interface{}, error) {
 
 // StrSet 方法的最后一个参数表示过期时间，0 表示永不过期
 func StrSet(key, value string) error {
-	err := Rdb.Set(ctx, key, value, 0).Err()
+	err := Rdb.Set(Ctx, key, value, 0).Err()
 	if err != nil {
 		return err
 	}
@@ -56,7 +56,7 @@ SetNX()与SetEX()的区别是，SexNX()仅当key不存在的时候才设置，
 
 // StrSetEX 设置键的同时，设置过期时间（ SetEX()方法不管该 key是否已经存在缓存中直接覆盖过期时间）
 func StrSetEX(key, value string, expiration time.Duration) error {
-	err := Rdb.SetEX(ctx, key, value, expiration).Err()
+	err := Rdb.SetEX(Ctx, key, value, expiration).Err()
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func StrSetEX(key, value string, expiration time.Duration) error {
 
 // StrSetNX SetNX()仅当 key不存在的时候才设置过期时间
 func StrSetNX(key, value string, expiration time.Duration) (bool, error) {
-	res, err := Rdb.SetNX(ctx, key, value, expiration).Result()
+	res, err := Rdb.SetNX(Ctx, key, value, expiration).Result()
 	if err != nil {
 		return res, err
 	}
@@ -74,7 +74,7 @@ func StrSetNX(key, value string, expiration time.Duration) (bool, error) {
 
 // StrGet 如果要获取的key在缓存中并不存在，Get()方法将会返回redis.Nil
 func StrGet(key string) (string, error) {
-	val, err := Rdb.Get(ctx, key).Result()
+	val, err := Rdb.Get(Ctx, key).Result()
 	if err != nil {
 		return val, err
 	}
@@ -83,7 +83,7 @@ func StrGet(key string) (string, error) {
 
 // StrMGet 批量查询key的值
 func StrMGet(key string) ([]interface{}, error) {
-	val, err := Rdb.MGet(ctx, key).Result()
+	val, err := Rdb.MGet(Ctx, key).Result()
 	if err != nil {
 		return val, err
 	}
@@ -91,7 +91,7 @@ func StrMGet(key string) ([]interface{}, error) {
 }
 
 func StrExists(key string) (res bool, err error) {
-	val, err := Rdb.Exists(ctx, key).Result()
+	val, err := Rdb.Exists(Ctx, key).Result()
 	if err != nil {
 		res = val == 0
 		return res, err
@@ -101,14 +101,14 @@ func StrExists(key string) (res bool, err error) {
 }
 
 func StrDel(key string) (int64, error) {
-	res, err := Rdb.Del(ctx, key).Result()
+	res, err := Rdb.Del(Ctx, key).Result()
 	if err != nil {
 		return res, err
 	}
 	return res, nil
 }
 func StrGetRange(key string) (string, error) {
-	res, err := Rdb.GetRange(ctx, key, 0, -1).Result()
+	res, err := Rdb.GetRange(Ctx, key, 0, -1).Result()
 	if err != nil {
 		return res, err
 	}
@@ -116,14 +116,14 @@ func StrGetRange(key string) (string, error) {
 }
 
 func StrSetExpireAt(key string, expireTime int64) error {
-	err := Rdb.ExpireAt(ctx, key, time.Unix(expireTime, 0)).Err()
+	err := Rdb.ExpireAt(Ctx, key, time.Unix(expireTime, 0)).Err()
 	if err != nil {
 		return err
 	}
 	return nil
 }
 func Ttl(key string) (val int, err error) {
-	duration, err := Rdb.TTL(ctx, key).Result()
+	duration, err := Rdb.TTL(Ctx, key).Result()
 	if err != nil {
 		return
 	}

@@ -1,8 +1,8 @@
 package user
 
 import (
-	"9YuBlog/models"
-	"9YuBlog/utils/encrypt"
+	"gin-demo/models"
+	"gin-demo/utils/encrypt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

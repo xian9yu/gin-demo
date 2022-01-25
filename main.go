@@ -1,10 +1,10 @@
 package main
 
 import (
-	"9YuBlog/middleware"
-	"9YuBlog/models"
-	"9YuBlog/router"
-	"9YuBlog/utils"
+	"gin-demo/middleware"
+	"gin-demo/models"
+	"gin-demo/router"
+	"gin-demo/utils"
 	"github.com/gin-gonic/gin"
 	"log"
 )

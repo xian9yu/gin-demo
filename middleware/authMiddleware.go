@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	"9YuBlog/models"
-	"9YuBlog/utils/encrypt"
+	"gin-demo/models"
+	"gin-demo/utils"
+	"gin-demo/utils/encrypt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
@@ -23,8 +24,8 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		// 判断 token在 redis中是否存在
-		isExist, errE := models.StrExists(encrypt.GetMd5String(Authorization))
-		if !isExist || errE != nil {
+		isExist, err := models.StrExists(Authorization)
+		if !isExist || err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"code": -1,
 				"msg":  "token失效，请重新登录",
@@ -34,30 +35,29 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		// 获取 token key的有效时间
-		timeVal,errT:= models.Ttl(encrypt.GetMd5String(Authorization))
-		if errT != nil {
-			c.JSON(http.StatusOK,gin.H{
+		timeVal, err := models.Ttl(encrypt.GetMd5String(Authorization))
+		if err != nil {
+			c.JSON(http.StatusOK, gin.H{
 				"code": -1,
 				"msg":  "获取token有效时间失败",
 			})
 		}
 		// 判断redis中的token有效时间小于配置中设定时间的一半则更新过期时间
-		if timeVal < int(ExpireTime/2) {
+		if timeVal < int(utils.ExpireTime/2) {
 			// 更新 token过期时间
-			_ = models.StrSetExpireAt(encrypt.GetMd5String(Authorization), time.Now().Unix()+ExpireTime)
+			_ = models.StrSetExpireAt(Authorization, time.Now().Unix()+utils.ExpireTime)
 		}
 
-		j := NewJWT()
-		claims, err := j.ParseToken(Authorization)
-		if err != nil {
-			if err == TokenExpired {
-				c.JSON(http.StatusOK, gin.H{
-					"code": -1,
-					"msg":  "token授权已过期，请重新登录",
-				})
-				c.Abort()
-				return
-			}
+		_, err = models.Rdb.Get(models.Ctx, Authorization).Result()
+		if err != nil { //TODO
+			//if err == TokenExpired {
+			//	c.JSON(http.StatusOK, gin.H{
+			//		"code": -1,
+			//		"msg":  "token授权已过期，请重新登录",
+			//	})
+			//	c.Abort()
+			//	return
+			//}
 			c.JSON(http.StatusOK, gin.H{
 				"code": -1,
 				"msg":  err.Error(),
@@ -66,6 +66,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("claims", claims)
+		c.Set("claims", Authorization)
 	}
 }
