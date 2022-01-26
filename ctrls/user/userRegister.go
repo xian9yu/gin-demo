@@ -5,6 +5,7 @@ import (
 	"gin-demo/utils/encrypt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 // Register 用户注册
@@ -16,7 +17,7 @@ func Register(c *gin.Context) {
 		})
 	}
 	user := new(models.User)
-	user.Username = c.Query("mail")
+	user.Mail = c.Query("mail")
 	user.Password = encrypt.GetMd5String(c.Query("password"))
 	rowsAffected, uid, err := user.Register(user)
 	if err != nil || rowsAffected < 1 {
@@ -27,7 +28,7 @@ func Register(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"code": 200,
-			"msg":  "注册成功<uid>=" + string(uid),
+			"msg":  "注册成功<uid>=" + strconv.FormatUint(uid, 10),
 		})
 	}
 }

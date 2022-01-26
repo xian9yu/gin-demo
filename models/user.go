@@ -44,11 +44,11 @@ func (u *User) GetAll() (total int64, list []User, err error) {
 	return total, userList, err
 }
 
-type info interface {
+type getUserInfoGenerics interface {
 	int | string
 }
 
-func GetInfoBy[T info](query string, v T) (users *User, err error) {
+func GetInfoBy[T getUserInfoGenerics](query string, v T) (users *User, err error) {
 	var user User
 	err = DB.Where("`"+query+"` = ?", v).Find(&user).Error
 	return &user, err
