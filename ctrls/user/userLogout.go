@@ -2,7 +2,6 @@ package user
 
 import (
 	"gin-demo/models"
-	"gin-demo/utils/encrypt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -11,13 +10,15 @@ import (
 func Logout(c *gin.Context) {
 	Authorization := c.Request.Header.Get("Authorization")
 
-	res, err := models.StrDel(encrypt.GetMd5String(Authorization))
+	res, err := models.StrDel(Authorization)
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  err,
 			"date": res,
 		})
+		c.Abort()
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"code": 200,

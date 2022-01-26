@@ -15,6 +15,8 @@ func GetUserList(c *gin.Context) {
 			"code": -1,
 			"msg":  err.Error(),
 		})
+		c.Abort()
+		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"code":  200,

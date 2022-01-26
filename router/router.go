@@ -10,16 +10,17 @@ import (
 
 func InitRouter(router *gin.Engine) {
 
-	router.GET("/register", user.Register)
+	router.POST("/register", user.Register)
 	router.POST("/login", user.Login)
 	router.GET("/token", user.GetTokenInfo)
 
 	// 用户
-	u := router.Group("/user/")
+	u := router.Group("/user")
 	u.Use(middleware.AuthMiddleware())
 	{
-		u.GET("/id", user.GetInfoById)
-		u.GET("/name", user.GetInfoByName)
+		u.GET("/id/:id", user.GetInfoById)
+		u.GET("/mail/:mail", user.GetInfoByMail)
+		u.GET("/username/:username", user.GetInfoByName)
 		u.GET("/list", user.GetUserList)
 		u.GET("/logout", user.Logout)
 

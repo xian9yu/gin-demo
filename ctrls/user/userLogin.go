@@ -13,26 +13,29 @@ import (
 // Login 用户登录
 func Login(c *gin.Context) {
 	user := new(models.User)
-	user.Username = c.PostForm("user_name")
-	user.Password = encrypt.GetMd5String(c.PostForm("pass_word"))
-
-	if err := user.Login(); err != nil {
+	user.Mail = c.PostForm("mail")
+	user.Password = encrypt.GetMd5String(c.PostForm("password"), models.PasswordMd5Key)
+	if !user.Login() {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  "登录失败",
 		})
+		c.Abort()
+		return
 	}
 
 	// 获取用户信息用于生成token
-	if userInfo, errs := user.FindByName(user.Username); errs != nil {
+	if userInfo, err := models.GetInfoBy("mail", user.Mail); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  "用户不存在",
 		})
+		c.Abort()
+		return
 	} else {
-		token := utils.NewToken(user.Username, strconv.FormatInt(int64(userInfo.Uid), 10))
+		token := utils.NewToken(userInfo.Mail, strconv.FormatInt(int64(userInfo.Uid), 10))
 
-		_ = models.StrSetEX(token, userInfo.Username+"_"+strconv.FormatInt(int64(userInfo.Uid), 10), time.Second*time.Duration(utils.ExpireTime))
+		_ = models.StrSetEX(token, userInfo.Mail+"_"+strconv.FormatInt(int64(userInfo.Uid), 10), time.Second*time.Duration(utils.ExpireTime))
 		c.JSON(http.StatusOK, gin.H{
 			"status": 200,
 			"msg":    "登陆成功",

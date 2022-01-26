@@ -18,6 +18,28 @@ func GetInfoById(c *gin.Context) {
 			"code": -1,
 			"msg":  "用户不存在",
 		})
+		c.Abort()
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"code": 200,
+			"user": userInfo,
+		})
+	}
+}
+
+// GetInfoByMail 通过 mail 获取用户info
+func GetInfoByMail(c *gin.Context) {
+	mail := c.Query("mail")
+
+	userInfo, err := models.GetInfoBy("mail", mail)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "用户不存在",
+		})
+		c.Abort()
+		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"code": 200,
@@ -37,6 +59,8 @@ func GetInfoByName(c *gin.Context) {
 			"code": -1,
 			"msg":  "用户不存在",
 		})
+		c.Abort()
+		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"code": 200,
