@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"gin-demo/utils/convert"
 	"io"
 	"net/http"
 	"time"
@@ -26,7 +27,7 @@ func GetCityByIp(ipAddr string) string {
 	r, _ := client.Get(`http://whois.pconline.com.cn/ipJson.jsp?json=true&ip=` + ipAddr)
 
 	body, _ := io.ReadAll(r.Body)
-	res, _ := GbkToUtf8(body) // 转换编码格式 (return:[]bytes,error)
+	res, _ := convert.GbkToUtf8(body) // 转换编码格式 (return:[]bytes,error)
 	_ = json.Unmarshal(res, &ip)
 	if ip.City == "" {
 		ip.City = ip.Addr
@@ -45,7 +46,7 @@ func IPInfo(ipAddr string) (ip IpInfo) {
 	r, _ := client.Get(`http://whois.pconline.com.cn/ipJson.jsp?json=true&ip=` + ipAddr)
 
 	body, _ := io.ReadAll(r.Body)
-	res, _ := GbkToUtf8(body) // 转换编码格式 (return:[]bytes,error)
+	res, _ := convert.GbkToUtf8(body) // 转换编码格式 (return:[]bytes,error)
 	if err := json.Unmarshal(res, &ip); err != nil {
 		return ip
 	}

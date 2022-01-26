@@ -7,7 +7,7 @@ type intConvert interface {
 }
 
 // MoreInt2String int to string
-func MoreInt2String[INT intConvert](num INT) string {
+func IntToString[INT intConvert](num INT) string {
 	switch interface{}(num).(type) {
 	case uint:
 		return strconv.Itoa(int(interface{}(num).(uint)))

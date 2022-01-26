@@ -8,7 +8,7 @@ type floatConvert interface {
 	~float32 | ~float64
 }
 
-func MoreFloat2String[T floatConvert](num T) string {
+func FloatToString[T floatConvert](num T) string {
 	switch interface{}(num).(type) {
 	case float32:
 		// 精度小数点后 6位
