@@ -14,11 +14,11 @@ var (
 
 func InitRedis() *redis.Client {
 	addr := conf.GetString("Redis.HP")
-	//pwd := conf.GetString("Redis.Password")
+	pwd := conf.GetString("Redis.Password")
 
 	Rdb = redis.NewClient(&redis.Options{
 		Addr:     addr, // host:port
-		Password: "",   // set password
+		Password: pwd,  // set password
 		DB:       0,    // use default DB
 		PoolSize: 100,  // 连接池大小
 	})

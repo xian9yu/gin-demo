@@ -18,7 +18,7 @@ type User struct {
 // Login 用户登录
 func (u *User) Login() bool {
 	var count int64
-	DB.Model(&User{}).Where("mail = ? AND password = ?", u.Mail, u.Password).Count(&count)
+	DB.Model(&User{}).Where("mail = ? AND password = ?", &u.Mail, &u.Password).Count(&count)
 	if count > 0 {
 		return true
 	}
@@ -29,6 +29,15 @@ func (u *User) Login() bool {
 func (u *User) Register(user User) (int64, uint64, error) {
 	result := DB.Create(&user)
 	return result.RowsAffected, user.Uid, result.Error
+}
+
+func (u *User) Count(mail string) bool {
+	var count int64
+	DB.Model(&User{}).Where("mail = ?", mail).Count(&count)
+	if count > 0 {
+		return true
+	}
+	return false
 }
 
 //func (u *User) FindById(id int) (users *User, err error) {
